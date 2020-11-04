@@ -1,28 +1,66 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-//make class immutable?
-public class IO {
-    Scanner scanner = new Scanner(System.in);
-    Controller controller;
-    //formatting for dob and event
-    DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+/*
+ *
+ * *
+ * **
+ * ***
+ * ****
+ * **** Written by Mia Coupland (with help from Jordan Barnes and Stack Overflow)
+ * **** (and a summer of Java MOOC which has thankfully paid off)
+ * ***
+ * **
+ * *
+ */
 
-    public IO () {
+
+public class IO {
+    private Scanner scanner = new Scanner(System.in);
+    public final Controller controller;
+    //formatting for dob and event
+    private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+    public IO() {
         this.controller = new Controller();
     }
 
-    public static void main () {
-        IO io = new IO();
-        io.startMenu();
+    public void debug() throws FileNotFoundException {
+        //debugging and seeing what works...
+        //creating sampleDate to use for DOB
+        /*LocalDate sampleDate = LocalDate.parse("05-08-1999", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate sampleEventDate = LocalDate.parse("20-11-2020", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        User user = new User("Sample Person", sampleDate, "sample@mail.com", "07827573649");
+        Establishment establishment = new Establishment("Sample Place", "10 Sample St", "S42 P73", 100);
+        Event event = new Event(user, sampleEventDate, 5, establishment);
+        /*testing the print methods for the newly created objects
+        won't go through checks when input directly, however
+        as the checks for phone number length etc happen in the menu
+        Flaw is that data input from CSV or like this will not be checked.
+        Could implement checks inside each class, but would be messy
+        Can safely assume that the real life use of this program would be
+        command line and the CSV information is accurate?
+        user.singleLine();
+        event.toString();
+        event.singleLine();
+        establishment.toString();*/
+
+        File establishmentsCSV = new File(Controller.class.getResource("src/establishments.csv").getFile());
+        String test = "";
+        Controller CSVController = new Controller(test);
+        System.out.println(CSVController.readCSV(establishmentsCSV));
+
     }
 
     public void startMenu() {
+        System.out.println("Welcome to track and trace!");
 
         while (true) {
-            System.out.println("Welcome to Track and Trace!" +
-                    "\nPlease enter a number to begin:" +
+            System.out.println("Please enter a number from the menu:" +
                     "\n1. Record an Event" +
                     "\n2. Add an Establishment" +
                     "\n3. Filter Records" +
@@ -41,33 +79,33 @@ public class IO {
                     break;
                 case 3:
                     System.out.println("You have selected 'Filter Records'." +
-                            "Please pick an option:" +
-                            "1. Records by Establishment" +
-                            "2. Records by Date" +
-                            "3. Records by Name" +
-                            "4. Go back");
+                            "\nPlease pick an option:" +
+                            "\n1. Records by Establishment" +
+                            "\n2. Records by Date" +
+                            "\n3. Records by Name" +
+                            "\n4. Go back");
                     int choice = Integer.valueOf(scanner.nextLine());
                     switch (choice) {
                         case 1:
                             System.out.println("You have selected 'Records by Establishment'" +
                                     "What is the name of the establishment?");
                             String establishmentName = scanner.nextLine();
-                            controller.getByEstablishments(establishmentName);
+                            System.out.println("Here are the records for events at " + establishmentName);
+                            for (Event event : controller.getByEstablishments(establishmentName)) {
+                                System.out.println(event.toString());
+                            }
                             break;
                         case 2:
                             System.out.println("You have selected 'Records by Date'" +
                                     "\nWhat date do you want to filter by? " +
-                                    "Please use the format DD/MM/YYYY");
-                            while (true) {
-                                String date = scanner.nextLine();
-                                try {
-                                    LocalDate filterDate = LocalDate.parse(date, format); //validity test
-                                    controller.getByDate(filterDate); //get records by their date
-                                } catch (Exception e) {
-                                    System.out.println("The date was not input in the correct format." +
-                                            "\nTry again.");
-                                }
+                                    "Please use the format DD-MM-YYYY");
+                            String date = scanner.nextLine();
+                            LocalDate filterDate = LocalDate.parse(date, format); //validity test
+                            System.out.println("Here are events on the date " + filterDate);
+                            for (Event event : controller.getByDate(filterDate)) {
+                                System.out.println(event.toString()); //get records by their date
                             }
+                            break;
                         case 3:
                             System.out.println("You have selected 'Records by Name'" +
                                     "\nWhat name do you want to filter by?");
@@ -78,34 +116,41 @@ public class IO {
                                 System.out.println("Please enter a valid email address.");
                                 email = scanner.nextLine();
                             }
-                            controller.getByName(name, email); //get records by their names
+                            for (Event event : controller.getByName(name, email)) {
+                                System.out.println(event.toString());//get records by their names
+                            }
                             break;
                         case 4:
                             System.out.println("Returning to the main menu...");
-                            startMenu();
+                            break;
                         default:
                             System.out.println("Please select a valid option from the menu above.");
                             choice = Integer.valueOf(scanner.nextLine());
-                            startMenu();
+                            break;
                     }
+                    break;
                 case 4:
                     System.out.println("You have selected 'Print Events'" +
                             "\nHere is a list of all of the events:");
-                    controller.getEvents();
+                    for (Event event : controller.getEvents()) {
+                        System.out.println(event.toString());
+                    }
                     break;
                 case 5:
                     System.out.println("You have selected 'Print Establishments'" +
                             "\nHere is a list of all of the establishments:");
-                    controller.getEstablishments();
+                    for (Establishment establishment : controller.getEstablishments()) {
+                        System.out.println(establishment.toString());
+                    }
+                    break;
                 case 6:
                     System.out.println("Exiting the program");
-                    break;
+                    System.exit(0);
                 default:
                     System.out.println("Sorry, please select a valid option from the list above.");
                     startMenu();
             }
         }
-
 
 
     }
@@ -134,8 +179,9 @@ public class IO {
             System.out.println("Please enter a valid email address.");
             email = scanner.nextLine();
         }
-        System.out.println("On what date and time is this event? (Please enter in format dd/mm/yyyy 00:00)");
-        String eventDate = scanner.nextLine();
+        System.out.println("On what date is this event? (Please enter in format dd-mm-yyyy)");
+        String eventDay = scanner.nextLine();
+        LocalDate eventDate = LocalDate.parse(eventDay, format);
         System.out.println("How big is the party size?");
         int partySize = Integer.valueOf(scanner.nextLine());
         System.out.println("Where is the name of the establishment where the event is taking place?");
@@ -151,15 +197,17 @@ public class IO {
         Establishment establishment = new Establishment(placeName, eventAddress, maxOccupancy);
         User user = new User(name, dob, email, phoneNo);
         Event event = new Event(user, eventDate, partySize, establishment);
+        controller.addEstablishment(establishment);
+        controller.addEvent(event);
 
-        System.out.println(event.eventPrint());
+        System.out.println(event.toString());
         System.out.println("Continue? Y for yes, N for no:");
         while (true) {
             String input = scanner.nextLine();
             if (input.equals("Y") || input.equals("y")) {
                 startMenu();
             } else if (input.equals("N") || input.equals("n")) {
-                break;
+                System.exit(0); // 0 for successful termination
             } else {
                 System.out.println("Try again");
             }
@@ -181,7 +229,6 @@ public class IO {
         Establishment establishment = new Establishment(placeName, eventAddress, maxOccupancy); //creates an establishment
         controller.addEstablishment(establishment); //stores the establishment
     }
-
 
 
 }
