@@ -22,7 +22,6 @@ public final class Controller {
     //general ideas and structure from the University of Helsinki's Java MOOC
     public ArrayList<String> readCSV(File establishmentCSVFileURI) throws FileNotFoundException {
         ArrayList<String> records = new ArrayList<>();
-
         while (scanner.hasNextLine()) {
             records.add(scanner.nextLine());
         }
@@ -32,18 +31,12 @@ public final class Controller {
         return records;
     }
 
-    //this is how i am used to doing it through Java MOOC
     public void parseEstablishments(ArrayList<String> records) {
         for (String line : records) {
-            String[] parts = line.split(",");
-            String name = parts[0];
-            String firstLine = parts[1];
-            String postcode = parts[2];
-            int maxOccupancy = Integer.valueOf(parts[3]);
-            Establishment establishment = new Establishment(
-                    name, firstLine, postcode, maxOccupancy);
-            addEstablishment(establishment);
+            String elements[] = line.split(",");
+            addEstablishment(new Establishment(elements[0], elements[1], elements[2], Integer.parseInt(elements[3])));
         }
+        System.out.println(getEstablishments());
     }
 
     public void addEvent(Event event) {
