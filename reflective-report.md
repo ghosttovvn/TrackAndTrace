@@ -30,7 +30,21 @@ then wondering why nothing was coming out!
 pseudocode and laid out all the requirements for 
 the assignment.
 
-- I also did not pull my project directly from NUcode
+- I also did not pull my project directly from NU code
 and created it myself, so I may have missed something
 important...
 
+- I would have liked to have figured out a better way to check for
+duplicate events, since EventID is a bit redundant in this
+specific test.
+
+- If I were to do the project again and more in depth, I would check
+for errors or incorrect data from a CSV file straight inside the controller method,
+rather than the IO.
+
+- I would also implement functionality to check the occupancy of the establishment 
+at any given time and make sure that too many people would not ettend at
+one time.
+
+- I'm proud of the project though and finished it in good time. As of writing this,
+I believe I have completed all the requirements.

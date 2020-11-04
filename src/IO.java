@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -28,28 +27,62 @@ public class IO {
     public IO() throws FileNotFoundException {
         File establishmentsCSV = new File(Controller.class.getResource("establishments.csv").getFile());
         this.controller = new Controller(establishmentsCSV);
-        controller.parseEstablishments(controller.readCSV(establishmentsCSV));
     }
 
-    public void debug() throws FileNotFoundException {
-        //debugging and seeing what works...
+    //debug method is looooong
+    public void debug() {
         //creating sampleDate to use for DOB
-        /*LocalDate sampleDate = LocalDate.parse("05-08-1999", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate sampleDate = LocalDate.parse("05-08-1999", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDate sampleEventDate = LocalDate.parse("20-11-2020", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        User user = new User("Sample Person", sampleDate, "sampleemailthatisreallyreallyreallyreallyreallyreallylong@mail.com", "07827573649");
-        Establishment establishment = new Establishment("Sample Place", "10 Sample St", "S42 P73", 100);
-        Event event = new Event(user, sampleEventDate, 5, establishment);
+
+        //user objects tests
+        User user0 = new User("Sample Person", sampleDate,
+                "sampleemailthatisreallyreallyreallyreallyreallyreallylong@mail.com",
+                "07827573649");//will work
+        User user1 = new User("Another Sample Person", sampleDate,
+                "m@googleyahoobtinternethotmail.co.uk.vu.ac.uk",
+                "+44826474928");//won't work, international phone number
+        User user2 = new User("Third Sample Person", sampleDate,
+                "m@n.com", "0729492928493928229823932932");//won't work, phone number too long
+
+        //establishment object tests
+        Establishment establishment0 = new Establishment("Sample Place",
+                "10 Sample St", "S42 P73", 100);//works
+        Establishment establishment1 = new Establishment("Another sample place",
+                "really really really really really long first address line",
+                "NE203 5019D9283E9i38P", 500000);//works despite length
+        Establishment establishment2 = new Establishment("third sample place",
+                "adl", "ne1", 1);//works
+
+        //Event object tests
+        Event event0 = new Event(user0, sampleEventDate, 5, establishment0);
+        Event event1 = new Event(user1, sampleEventDate, 200, establishment1);
+        //in future you shouldn't be able to exceed max occupancy on a given day etc
+        Event event2 = new Event(user2, sampleEventDate, 10, establishment2);
         /*testing the print methods for the newly created objects
         won't go through checks when input directly, however
         as the checks for phone number length etc happen in the menu
         Flaw is that data input from CSV or like this will not be checked.
-        Could implement checks inside each class, but would be messy
+        Could implement checks inside each class.
         Can safely assume that the real life use of this program would be
-        command line and the CSV information is accurate?
-        user.singleLine();
-        event.toString();
-        event.singleLine();
-        establishment.toString();*/
+        command line and the CSV information is accurate?*/
+
+        //testing output for each object
+        user0.singleLine();
+        user0.details();
+        user1.singleLine();
+        user1.details();
+        user2.singleLine();
+        user2.details();
+        establishment0.toString();
+        establishment1.toString();
+        establishment2.toString();
+        event0.toString();
+        event0.singleLine();
+        event1.toString();
+        event1.singleLine();
+        event2.toString();
+        event2.singleLine();
     }
 
     public void startMenu() {
