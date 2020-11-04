@@ -19,10 +19,25 @@ public class Establishment {
         this.maxOccupancy = maxOccupancy;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public String getPostcode() {
+        return this.postcode;
+    }
+
+    public int maxOccupancy() {
+        return this.maxOccupancy;
+    }
+
     @Override
     public String toString() {
-        return "Establishment" +
-                "\n\t\tName: " + this.name +
-                "\n\t\tAddress: " + this.address + " "+ this.postcode;
+        return "\n\t\tName: " + this.getName() +
+                "\n\t\tAddress: " + this.getAddress() + " " + this.getPostcode();
     }
 }

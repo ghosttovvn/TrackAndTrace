@@ -1,21 +1,30 @@
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Event {
 
     private User user;
     private LocalDate date;
-    //include time
+    private LocalDateTime time;
     private int size;
     private Establishment establishment;
-    private DateTimeFormatter format;
+    //private DateTimeFormatter formatDate;
+    private DateTimeFormatter formatTime;
+    private String eventID;
+    //created eventID so the ID doesn't change each time single line is called
 
-    public Event(User user, String date, int partyNumber, Establishment establishment) {
+    public Event(User user, LocalDate date, int partyNumber, Establishment establishment) {
         this.user = user;
         this.size = partyNumber;
         this.establishment = establishment;
-        this.format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.date = LocalDate.parse(date, format);
+        //this.formatDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        this.formatTime = DateTimeFormatter.ofPattern("HH:mm");
+        this.date = date;
+        this.time = LocalDateTime.now();
+        /*assuming we just use the current time, as that is what was used
+        in the demo*/
+        this.eventID = eventID();
     }
 
     public Event(User user, int partyNumber, Establishment establishment) {
@@ -32,6 +41,10 @@ public class Event {
         return this.date;
     }
 
+    public LocalDateTime getTime() {
+        return this.time;
+    }
+
     public int getPartySize() {
         return this.size;
     }
@@ -41,23 +54,31 @@ public class Event {
     }
 
     public String singleLine() {
-        return "Event ID: " + eventID() + " | Recorded User";
+        return "Event ID: " + this.eventID + " | Recorded User";
     }
 
     public String eventID() {
-        return "";//event ID
+        //event ID. Relies on the chance that no two are the same...
+        double random = Math.random();
+        double randomMultiplier = Math.random() * 1000; //x1000 so the ID is longer
+        //as Math.random() creates a decimal
+        int total = (int) (random * randomMultiplier);
+        return "EV" + total;//event ID
     }
 
-    public String eventPrint() {
+    //i saw we were not meant to change the toString methods
+    //unless it's to debug, but i'd already done this
+    @Override
+    public String toString() {
         return String.format("%s\n\t" +
                         "%s\n\t" +
-                         "Date: %s\n\t" +
-                        //"Time %s\n\t" +
+                        "Date: %s\n\t" +
+                        "Time %s\n\t" +
                         "Party size: %s\n\t" +
-                        "%s\n\t",
+                        "Establishment: \n\t\t%s",
 
-                singleLine(), user.details(), date,
-                //time.format("HH:MM"),
+                singleLine(), user.details(), this.date,
+                this.time,
                 this.size, establishment.toString());
     }
 }

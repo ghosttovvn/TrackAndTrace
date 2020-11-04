@@ -15,7 +15,7 @@ public class User {
         this.dob = dob;
         this.phoneNo = phoneNo;
         this.email = email;
-        this.age = getAge(this.dob, LocalDate.now());
+        this.age = calculateAge(this.dob, LocalDate.now());
     }
 
     //To print the single line displaying name and phone number
@@ -40,9 +40,13 @@ public class User {
         return this.email;
     }
 
+    public int getAge() {
+        return this.age;
+    }
+
     //code for 'getAge' found from StackOverflow at:
     //https://stackoverflow.com/questions/1116123/how-do-i-calculate-someones-age-in-java
-    public int getAge(LocalDate dob, LocalDate currentDate) {
+    public int calculateAge(LocalDate dob, LocalDate currentDate) {
         if ((dob != null) && (currentDate != null)) {
             return Period.between(dob, currentDate).getYears();
         } else {
@@ -58,10 +62,10 @@ public class User {
                         "Phone Number: %s\n\t" +
                         "Age: %d",
 
-                name,
-                dob,
-                email,
-                phoneNo,
-                age);
+                this.getName(),
+                this.getDob(),
+                this.getEmail(),
+                this.getPhoneNo(),
+                this.getAge());
     }
 }
