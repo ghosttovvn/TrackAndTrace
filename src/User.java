@@ -44,7 +44,7 @@ public class User {
         return this.age;
     }
 
-    //code for 'getAge' found from StackOverflow at:
+    //code for 'calculateAge' found from StackOverflow at:
     //https://stackoverflow.com/questions/1116123/how-do-i-calculate-someones-age-in-java
     public int calculateAge(LocalDate dob, LocalDate currentDate) {
         if ((dob != null) && (currentDate != null)) {

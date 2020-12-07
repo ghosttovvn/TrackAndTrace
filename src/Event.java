@@ -66,8 +66,8 @@ public class Event {
         return "EV" + total;//event ID
     }
 
-    //i saw we were not meant to change the toString methods
-    //unless it's to debug, but i'd already done this
+    //i saw we were advised not to change the toString methods
+    //unless it's to debug, but i had already done this
     @Override
     public String toString() {
         return String.format("%s\n\t" +

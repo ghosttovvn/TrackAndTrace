@@ -21,7 +21,7 @@ public final class Controller {
     }
 
     //greatly helped with this code by Jordan Barnes' demo and sample code
-    //general ideas and structure from the University of Helsinki's Java MOOC
+    //general structure from the University of Helsinki's Java MOOC
     public ArrayList<String> readCSV(File establishmentCSVFileURI) throws FileNotFoundException {
         Scanner scanner = new Scanner(establishmentCSVFileURI);
 

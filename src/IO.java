@@ -9,9 +9,7 @@ import java.util.Scanner;
  * *
  * **
  * ***
- * ****
- * **** Written by Mia Coupland (with help from Jordan Barnes and Stack Overflow)
- * **** (and a summer of Java MOOC which has thankfully paid off)
+ * **** Written by Mia Coupland (with help from Jordan Barnes)
  * ***
  * **
  * *
@@ -107,92 +105,106 @@ public class IO {
                     recordEstablishment();
                     break;
                 case 3:
-                    System.out.println("You have selected 'Filter Records'." +
-                            "\nPlease pick an option:" +
-                            "\n1. Records by Establishment" +
-                            "\n2. Records by Date" +
-                            "\n3. Records by Name" +
-                            "\n4. Go back");
-                    int choice = Integer.valueOf(scanner.nextLine());
-                    switch (choice) {
-                        case 1:
-                            System.out.println("You have selected 'Records by Establishment'" +
-                                    "What is the name of the establishment?");
-                            String establishmentName = scanner.nextLine();
-                            System.out.println("Here are the records for events at " + establishmentName);
-                            for (Event event : controller.getByEstablishments(establishmentName)) {
-                                System.out.println(event.toString());
-                            }
-                            break;
-                        case 2:
-                            System.out.println("You have selected 'Records by Date'" +
-                                    "\nWhat date do you want to filter by? " +
-                                    "Please use the format DD-MM-YYYY");
-                            String date = scanner.nextLine();
-                            LocalDate filterDate = LocalDate.parse(date, format); //validity test
-                            System.out.println("Here are events on the date " + filterDate);
-                            for (Event event : controller.getByDate(filterDate)) {
-                                System.out.println(event.toString()); //get records by their date
-                            }
-                            break;
-                        case 3:
-                            System.out.println("You have selected 'Records by Name'" +
-                                    "\nWhat name do you want to filter by?");
-                            String name = scanner.nextLine();
-                            System.out.println("What is the email you want to filter by?");
-                            String email = scanner.nextLine();
-                            while (!email.contains("@")) {
-                                System.out.println("Please enter a valid email address.");
-                                email = scanner.nextLine();
-                            }
-                            for (Event event : controller.getByName(name, email)) {
-                                System.out.println(event.toString());//get records by their names
-                            }
-                            break;
-                        case 4:
-                            System.out.println("Returning to the main menu...");
-                            break;
-                        default:
-                            System.out.println("Please select a valid option from the menu above.");
-                            choice = Integer.valueOf(scanner.nextLine());
-                            break;
-                    }
+                    filters();
                     break;
                 case 4:
-                    System.out.println("You have selected 'Print Events'" +
+                    System.out.println("\nYou have selected 'Print Events'" +
                             "\nHere is a list of all of the events:");
                     for (Event event : controller.getEvents()) {
                         System.out.println(event.toString());
                     }
                     break;
                 case 5:
-                    System.out.println("You have selected 'Print Establishments'" +
+                    System.out.println("\nYou have selected 'Print Establishments'" +
                             "\nHere is a list of all of the establishments:");
                     for (Establishment establishment : controller.getEstablishments()) {
                         System.out.println(establishment.toString());
                     }
                     break;
                 case 6:
-                    System.out.println("Exiting the program");
+                    System.out.println("\nExiting the program");
                     System.exit(0);
                 default:
-                    System.out.println("Sorry, please select a valid option from the list above.");
+                    System.out.println("\nSorry, please select a valid option from the list above.");
                     startMenu();
             }
         }
+    }
 
+    public void filters() {
+        System.out.println("You have selected 'Filter Records'." +
+                "\nPlease pick an option:" +
+                "\n1. Records by Establishment" +
+                "\n2. Records by Date" +
+                "\n3. Records by Name" +
+                "\n4. Go back");
+        int choice = Integer.valueOf(scanner.nextLine());
+        switch (choice) {
+            case 1:
+                recordsByEstablishment();
+                break;
+            case 2:
+                recordsByDate();
+                break;
+            case 3:
+                recordsByName();
+                break;
+            case 4:
+                System.out.println("\nReturning to the main menu...");
+                break;
+            default:
+                System.out.println("\nPlease select a valid option from the menu above.");
+                choice = Integer.valueOf(scanner.nextLine());
+                break;
+        }
+    }
 
+    public void recordsByEstablishment() {
+        System.out.println("You have selected 'Records by Establishment'" +
+                "\nWhat is the name of the establishment?");
+        String establishmentName = scanner.nextLine();
+        System.out.println("\nHere are the records for events at " + establishmentName);
+        for (Event event : controller.getByEstablishments(establishmentName)) {
+            System.out.println(event.toString());
+        }
+    }
+
+    public void recordsByDate() {
+        System.out.println("You have selected 'Records by Date'" +
+                "\nWhat date do you want to filter by? " +
+                "Please use the format DD-MM-YYYY");
+        String date = scanner.nextLine();
+        LocalDate filterDate = LocalDate.parse(date, format); //validity test
+        System.out.println("\nHere are events on the date " + filterDate);
+        for (Event event : controller.getByDate(filterDate)) {
+            System.out.println(event.toString()); //get records by their date
+        }
+    }
+
+    public void recordsByName() {
+        System.out.println("You have selected 'Records by Name'" +
+                "\nWhat name do you want to filter by?");
+        String name = scanner.nextLine();
+        System.out.println("\nWhat is the email you want to filter by?");
+        String email = scanner.nextLine();
+        while (!email.contains("@")) {
+            System.out.println("\nPlease enter a valid email address.");
+            email = scanner.nextLine();
+        }
+        for (Event event : controller.getByName(name, email)) {
+            System.out.println(event.toString());//get records by their names
+        }
     }
 
     public void recordEvent() {
         System.out.println("Please enter the following data as prompted.");
         System.out.println("What is your full name?");
         String name = scanner.nextLine();
-        System.out.println("Thank you. what is your date of birth? (Please enter in format DD/MM/YYYY)");
+        System.out.println("Thank you. what is your date of birth? (Please copy the format DD-MM-YYYY)");
         String date = scanner.nextLine();
         LocalDate dob = LocalDate.parse(date, format); //change dob from string to date. test for validity
         while (dob.isAfter(LocalDate.now())) {
-            System.out.println("Please enter a valid date of birth in format DD/MM/YYYY");
+            System.out.println("Please enter a valid date of birth in format DD-MM-YYYY");
             date = scanner.nextLine();
             dob = LocalDate.parse(date, format);
         }
